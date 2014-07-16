@@ -24,7 +24,9 @@ module Goodreads
       params.merge!(:format => API_FORMAT, :key => token)
       url = "#{API_URL}#{path}"
 
-      resp = RestClient.get(url, :params => params) do |response, request, result, &block|
+      options = {method: :get, url: url, headers: {params: params}, timeout: 10, open_timeout: 5}
+
+      resp = RestClient::Request.execute(options) do |response, request, result, &block|
         case response.code
           when 200
             response.return!(request, result, &block)
